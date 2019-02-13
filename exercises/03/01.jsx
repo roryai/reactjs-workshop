@@ -47,9 +47,24 @@ import DataColumn from 'scenes/components/DataTable/DataTableRow/DataRowColumn';
 // 🐨  Remember, `undefined` is a special object in JS, which you can use to 'short-circuit' some expressions
 class Row extends React.Component {
   render() {
+    const {team, functions} = this.props
+
+    // render nothing if no values are present
+    if (team == null && functions == null) {
+      return null;
+    }
+
     return (
       <div className="flex w-1/4">
-        Start HERE!
+        <DataColumn id="team">{team || 'Unknown Team'}</DataColumn> {/* this sets team to 'Unknown Team' if team is undefined. If it's null it will display null.*/}
+        <DataColumn id="functions">
+          {
+            Array.isArray(functions) && functions.length > 0
+              ? functions.join(', ')
+              : '-'
+          }
+        </DataColumn>
+
       </div>
     );
   }

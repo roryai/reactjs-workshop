@@ -36,10 +36,32 @@ import React from 'react';
 // 🐨  You can initialise state and class properties using any of the valid syntax options; this project is setup
 //     to support "all" of the currently popular appraoches.
 class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {team: ""};
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) { // this event is not the native DOM event, it's a react copy called a synthetic event.
+  // const value = event.target.value
+  const { value } = event.target // this line and above are the same. THis one is ES6 syntax
+    this.setState({team: value})
+  }
+
   render() {
+    const team = this.state.team
     return (
       <div className="w-1/4">
         Start HERE!
+        <input
+          value = { team } // this ensures that the value that the user sees in the input box and the value that appears on the screen
+                           // are idwentical- tightly linked. Without this then the user is seeing what the browser knows
+                           // they've typed, and because of lag it can look different than what the user sees elsewhere.
+          className="appearance-none block w-full bg-grey-lighter text-grey-darker border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          type='text'
+          onChange={this.handleChange}
+        />
+        <h1> { team } </h1>
       </div>
     );
   }

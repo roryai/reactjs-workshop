@@ -28,10 +28,22 @@ import React from 'react';
 //        Unavailable  =>    'fas fa-user-slash'
 //        Available    =>    'far fa-user'
 //        Busy         =>    'fas fa-user'
+// class Unavailable extends React.component {
+// 	Render () {
+// 		return <h1> hello </h1>
+// 	}
+// }
+//
+// const status = Unavailable
+// const stat = 4
+
+
 function StatusBlock(props) {
   return (
     <div>
-      Start HERE!
+      <i> {props.status} </i>
+      <h1> {props.stat} </h1>
+      <i className='far fa-user'></i>
     </div>
   );
 }

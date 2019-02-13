@@ -40,6 +40,7 @@ class Timer extends React.Component {
     return (
       <div>
         Start HERE!
+         {/* hint: componentDidMount(), set interval, componenetWill Unmount to remove it when no longer wanted. clearinterval. needs id, set a const.   */ }
       </div>
     );
   }
