@@ -40,14 +40,16 @@ import PropTypes from 'prop-types';
 //
 // 👩‍💻  Credit: Based on https://github.com/ReactTraining/react-workshop/
 export class App extends React.Component {
+
   render() {
+    const {mouse} = this.props
     return (
-      <div className="">
-        Start HERE!
+      <div> {/* this is the innermost div to be rendered. it sits inside the div from the withMouse method's div, below.*/}
+        (Current position is: {mouse.x || '0'}, {mouse.y || '0'})
       </div>
     );
   }
-}
+};
 
 // Add runtime prop validation
 App.propTypes = {
@@ -58,12 +60,29 @@ App.propTypes = {
 };
 
 // Define our HOC
-function withMouse() {
-  return (
-    <div>
-      Start HERE (HOC)!
-    </div>
-  );
+// needs to return the current mouse coordinates. Updates them in real time.
+function withMouse(InputComponent) {
+  return class HOCComponent extends React.Component { {/* this class can be anonymous, named here for clarity */}
+    constructor(props) {
+      super(props);
+      this.mouseHandler = this.mouseHandler.bind(this) // always bind a method that's contained withing a class so that it can be referenced with this.
+      this.state = {x: 0, y:0}
+    }
+
+    mouseHandler(event) {
+      this.setState({ x: event.clientX, y: event.clientY})
+    };
+
+    render() {
+      return (
+        <div className="" onMouseMove={this.mouseHandler}>
+          <InputComponent mouse={{x: this.state.x, y: this.state.y}} /> {/* this is where the dumb component, App, is instantiated. The 'class' is passed in, not the instantiated object. It is instantiated with the state belonging to the HOC. */}
+        </div>
+      )
+    }
+  }
 }
 
-export default App;
+const AppWithHOC = withMouse(App)
+
+export default AppWithHOC;

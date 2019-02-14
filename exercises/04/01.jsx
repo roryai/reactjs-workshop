@@ -9,7 +9,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import DataTableHeading from 'scenes/components/DataTable/DataTableHeading';
-import DataRow from '../03/02';
+import DataRow from '../03/02'; // this imports the Row from exercise 3.2 and renames it to DataRow
 
 // Exercise 04/01
 // ===========
@@ -37,11 +37,37 @@ import DataRow from '../03/02';
 // 🐨  The DataTable.propTypes (below) can be useful to summary the expected shape of your props
 class DataTable extends React.Component {
   render() {
+
+    const {data} = this.props;
+
+    // THIS
+
+    // what to display if the data is not present or is empty
+    if (data == null || (Array.isArray(data) && data.length == 0)) {
+      return <div>No data to display</div>
+    }
+
+    const rows = data.map(datum => <DataRow key={datum.name} name={datum.name} team={datum.team} status={datum.status} sources={datum.sources} functions={datum.functions}></DataRow>)
+
     return (
       <div className="w-full">
-        Start HERE!
+        <DataTableHeading />
+        {rows}
       </div>
     );
+
+    //OR
+
+    // return (
+    //   <div className="w-full">
+    //     <DataTableHeading />
+    //     {
+    //       Array.isArray(data) && data.length == 0
+    //       ? data.map(datum => <DataRow key={`${item.name}--${item.team}`} {...item}/>)
+    //       : "No data to display"
+    //     }
+    //   </div>
+    // );
   }
 }
 
