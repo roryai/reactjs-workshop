@@ -14,15 +14,12 @@ import PropTypes from 'prop-types';
 // ===========
 //
 // We will take a short diversion here and explore "HOCs", or Higher-Order-Components.
-// While the demo app doesn't define any HOCs directly, HOCs have been one of the foundations of advanced
+// While the demo app doesn't define any HOCs directly, HOCs are one of the foundational advanced
 // concepts in ReactJS, and can help abstract cross-cutting concerns across several components.
 // They also showcase one of ReactJS' powerhouse features: composability.
 //
-// As we mentioned above, while we won't define any inside the demo app, we will be using one -- arguably the most
+// Although, while we won't define any inside the demo app, we will be using one -- arguably the most
 // popular -- heavily when we explore Redux.
-//
-// GOAL
-// Once completed, we will be able to display the current mouse position on the screen; and have it update in real time.
 //
 // Tasks
 // --------
@@ -54,7 +51,7 @@ export class App extends React.Component {
   }
 };
 
-// Add prop validation
+// Add runtime prop validation
 App.propTypes = {
   mouse: PropTypes.shape({
     x: PropTypes.number.isRequired,
@@ -65,21 +62,30 @@ App.propTypes = {
 // Define our HOC
 // needs to return the current mouse coordinates. Updates them in real time.
 function withMouse(InputComponent) {
-  return class HOCComponent extends React.Component { {/* this class can be anonymous, named here for clarity */}
+  return class HOCComponent extends React.Component { // this class can be anonymous, named here for clarity
     constructor(props) {
       super(props);
       this.mouseHandler = this.mouseHandler.bind(this) // always bind a method that's contained withing a class so that it can be referenced with this.
-      this.state = {x: 0, y:0}
+      this.state = {
+        x: 0,
+        y: 0
+      }
     }
 
     mouseHandler(event) {
-      this.setState({ x: event.clientX, y: event.clientY})
+      const { clientX, clientY } = event;
+
+      this.setState({
+        x: clientX,
+        y: clientY
+      })
     };
 
     render() {
       return (
         <div className="" onMouseMove={this.mouseHandler}>
-          <InputComponent mouse={{x: this.state.x, y: this.state.y}} /> {/* this is where the dumb component, App, is instantiated. The 'class' is passed in, not the instantiated object. It is instantiated with the state belonging to the HOC. */}
+          <InputComponent {...this.props} mouse={this.state} /> {/* this is where the dumb component, App, is instantiated. The 'class' is passed in, not the instantiated object. It is instantiated with the state belonging to the HOC. */}
+                          {/* ...this.props passes all the props that are contained within the HOC object. In this case it's empty, but it's good practive generally.*/}
         </div>
       )
     }
