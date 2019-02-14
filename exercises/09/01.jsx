@@ -48,22 +48,46 @@ import { createStore } from 'redux';
 // 🐨   [2] https://redux.js.org/api/createstore#createstorereducer-preloadedstate-enhancer
 
 // Define our Action type constants
-export const CONSULTANTS_FETCH_REQUEST = 'CONSULTANTS.FETCH.REQEST';
+export const CONSULTANTS_FETCH_REQUEST = 'CONSULTANTS.FETCH.REQUEST';
 export const CONSULTANTS_FETCH_COMPLETE = 'CONSULTANTS.FETCH.COMPLETE';
 
 // Define our Action Creators. These are used
 // to signal that we want an update made to our store.
-export const fetchConsultantData = null;
 
-export const fetchConsultantComplete = null;
+// action creators create the boxes we put on the conveyor belt to send to the store. they are processed by reducers
+
+export const fetchConsultantData = () => {
+  return {
+    type: CONSULTANTS_FETCH_REQUEST,
+    payload: null,
+    meta: null,
+    error: false
+  }
+};
+
+export const fetchConsultantComplete = consultantData => {
+  return {
+    type: CONSULTANTS_FETCH_COMPLETE,
+    payload: {data: consultantData},
+    meta: null,
+    error: consultantData instanceof Error
+  }
+};
 
 // Setup our reducer
-export function reducer(prevState, action) {
-  // to be completed
+export function reducer(prevState = [], action) { // the default value here guards against prevState being undefined
+  switch (action.type){
+    case CONSULTANTS_FETCH_COMPLETE:
+      return Array.isArray(action.payload.data) ? [...action.payload.data] : [];
+      // the ... unpacks the array contents and puts it into a new array. This is because you have to return something with a different object ID to what was passed in.
+      // the empty array secondary option is defensive programming in case the primary option resolves to undefined- this causes a lot of pain if it happens.
+    default:
+      return prevState
+  }
 }
 
 // Create our store
-const store = null;
+const store = createStore(reducer);
 
 // Export the store to our test suite
 export default store;
